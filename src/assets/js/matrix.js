@@ -1,4 +1,3 @@
-// Matrix canvas
 jQuery(document).ready(function($) {
   const canvas = document.getElementById("matrix-canvas");
   const ctx = canvas.getContext("2d");
@@ -6,25 +5,26 @@ jQuery(document).ready(function($) {
   let symbol = "アァカサタナハマヤラワガザダバパイィキシチニヒミリギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン";
   symbol = symbol.split("");
 
-  const font_size = 12; // Use the same font size as defined in CSS
-  let columns; // Number of columns for the rain
-  let drops = []; // y position of drops
-  let isInitialScan = true; // Track the initial scanning state
+  const font_size = 12;
+  let columns;
+  let drops = [];
+  let isInitialScan = true;
 
   function onResize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    columns = canvas.width / font_size; // Recalculate columns
-    drops = Array(Math.floor(columns)).fill(0); // Reset drops
+    columns = canvas.width / font_size;
+    drops = Array(Math.floor(columns)).fill(0);
+    isInitialScan = true; // Reset the initial scan flag on resize
   }
 
   function draw() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#0F0"; // Green text
-    ctx.font = font_size + "px Space Mono"; // Set font size and family
+    ctx.fillStyle = "#0F0";
+    ctx.font = font_size + "px Space Mono";
 
     for (let i = 0; i < drops.length; i++) {
       const text = symbol[Math.floor(Math.random() * symbol.length)];
@@ -32,20 +32,18 @@ jQuery(document).ready(function($) {
 
       if (drops[i] * font_size > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
-        if (isInitialScan) isInitialScan = false; // End initial scan once any drop reaches the bottom
+        if (isInitialScan) isInitialScan = false;
       }
 
       if (isInitialScan) {
-        // During initial scan, make it 50% faster
-        drops[i] += 1.5; // Faster fall during initial scan
+        drops[i] += 1.5;
       } else {
-        // Make the rain effect 50% slower after initial scan
-        drops[i] += 0.5; // Slower fall for normal rain
+        drops[i] += 0.5;
       }
     }
   }
 
   window.addEventListener('resize', onResize, false);
-  onResize(); // Initialize canvas dimensions and columns
-  setInterval(draw, 33); // Start the animation loop
+  onResize();
+  setInterval(draw, 33);
 });
